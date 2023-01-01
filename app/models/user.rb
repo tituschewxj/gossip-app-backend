@@ -15,7 +15,7 @@ class User < ApplicationRecord
   # has_many :comments, dependent: :destroy
   # has_many :posts, dependent: :destroy
 
-  validates :username, uniqueness: true,  presence: true
+  # validates :username, uniqueness: true,  presence: true
 
   # the revocation strategy makes uses of jwt_payload method in the user model
   # def jwt_payload

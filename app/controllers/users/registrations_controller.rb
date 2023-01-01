@@ -84,9 +84,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   
   private
 
-  def user_params
-    params.require(:user).permit(:username, :email, :password)
-  end
+  # def user_params
+  #   params.require(:user).permit(:email, :password)
+  # end
 
   # devise to communicate via JSON
   def respond_with(resource, _opts = {})
