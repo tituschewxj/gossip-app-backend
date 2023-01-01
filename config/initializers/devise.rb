@@ -317,6 +317,9 @@ Devise.setup do |config|
   # the token should be revoked
   config.jwt do |jwt|
     jwt.secret = Rails.application.credentials.fetch(:secret_key_base)
+    # jwt.request_formats = {
+    #   landlord: [nil, :json]
+    # }
     jwt.dispatch_requests = [
       ['POST', %r{^/login$}]
     ]

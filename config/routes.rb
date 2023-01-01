@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'private/test'
   # get 'current_user/index'
   get '/current_user', to: 'current_user#index'
 
@@ -13,7 +14,6 @@ Rails.application.routes.draw do
     registrations: 'users/registrations'
   }
 
-  # resources :posts
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -26,4 +26,4 @@ Rails.application.routes.draw do
       end
     end
   end
-end
+end 

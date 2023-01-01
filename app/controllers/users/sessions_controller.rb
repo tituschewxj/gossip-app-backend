@@ -12,16 +12,16 @@ class Users::SessionsController < Devise::SessionsController
 
   respond_to :json
 
-  def create
-    user = User.find_by_email(sign_in_params[:email])
+  # def create
+  #   user = User.find_by_email(sign_in_params[:email])
 
-    if user && user.valid_password?(sign_in_params[:password])
-      token = user.generate_jwt
-      render json: token.to_json
-    else
-      render json: { erros: { 'email or password' => ['is invalid'] } }
-    end
-  end
+  #   if user && user.valid_password?(sign_in_params[:password])
+  #     token = user.generate_jwt
+  #     render json: token.to_json
+  #   else
+  #     render json: { erros: { 'email or password' => ['is invalid'] } }
+  #   end
+  # end
 
   # POST /resource/sign_in
   # def create
