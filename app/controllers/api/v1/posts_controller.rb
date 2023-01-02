@@ -1,11 +1,10 @@
 class Api::V1::PostsController < ApplicationController
-  # before_action :authenticate_user!
+  before_action :authenticate_user!, only: %i[ create update destroy]
   before_action :set_post, only: %i[ show update destroy ]
 
   # GET /posts
   def index
     @posts = Post.all
-
     render json: @posts
   end
 
@@ -20,7 +19,8 @@ class Api::V1::PostsController < ApplicationController
     @post = Post.new(post_params)
 
     if @post.save
-      render json: @post, status: :created, location: @post
+      render json: @post, status: :created
+      # , location: @post # this causes problems: NoMethodError: (undefined method `post_url'...
     else
       render json: @post.errors, status: :unprocessable_entity
     end
@@ -35,9 +35,9 @@ class Api::V1::PostsController < ApplicationController
     end
   end
 
-  def edit
-    render json: @post
-  end
+  # def edit
+  #   render json: @post
+  # end
 
   # DELETE /posts/1
   def destroy

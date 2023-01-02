@@ -12,10 +12,7 @@ class User < ApplicationRecord
   #   JWT.encode( {id: id, exp: 60.days.from_now.to_i}, Rails.application)
   # end
 
-  # has_many :comments, dependent: :destroy
-  # has_many :posts, dependent: :destroy
-
-  # validates :username, uniqueness: true,  presence: true
+  has_one :profile, dependent: :destroy
 
   # the revocation strategy makes uses of jwt_payload method in the user model
   # def jwt_payload

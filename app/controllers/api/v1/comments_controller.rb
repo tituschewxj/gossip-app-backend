@@ -14,7 +14,8 @@ class Api::V1::CommentsController < ApplicationController
         # @comment.post_id = @post.id # this seems important
 
         if @comment.save
-            render json: @comment, status: :created, location: @commment
+            render json: @comment, status: :created
+            # , location: @commment
         else
             render json: @comment.errors, status: :unprocessable_entity
         end

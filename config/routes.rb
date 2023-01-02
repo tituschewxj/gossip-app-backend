@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  # get 'profiles/index'
   get 'private/test'
   # get 'current_user/index'
   get '/current_user', to: 'current_user#index'
@@ -21,6 +22,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      resources :profiles
       resources :posts do
         resources :comments, shallow: true
       end
