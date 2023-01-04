@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_03_135805) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_04_025211) do
   create_table "comments", force: :cascade do |t|
     t.text "content"
     t.string "author"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "post_id", null: false
-    t.integer "profile_id", null: false
+    t.integer "profile_id", default: 3, null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["profile_id"], name: "index_comments_on_profile_id"
   end
@@ -28,8 +28,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_03_135805) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "author"
-    t.integer "profile_id", null: false
+    t.integer "profile_id", default: 3, null: false
     t.index ["profile_id"], name: "index_posts_on_profile_id"
+  end
+
+  create_table "posts_tags", force: :cascade do |t|
+    t.integer "post_id", null: false
+    t.integer "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_posts_tags_on_post_id"
+    t.index ["tag_id"], name: "index_posts_tags_on_tag_id"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -39,6 +48,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_03_135805) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -58,5 +73,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_03_135805) do
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "profiles"
   add_foreign_key "posts", "profiles"
+  add_foreign_key "posts_tags", "posts"
+  add_foreign_key "posts_tags", "tags"
   add_foreign_key "profiles", "users"
 end
