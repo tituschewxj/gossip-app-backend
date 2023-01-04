@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  # get 'posts_tags/index'
   # get 'tags/index'
   # get 'tag/index'
   # get 'profiles/index'
@@ -26,6 +27,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :profiles
       resources :tags
+      resources :posts_tags
       resources :posts do
         resources :comments, shallow: true
       end

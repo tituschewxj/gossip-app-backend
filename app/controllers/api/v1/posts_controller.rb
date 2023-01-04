@@ -4,7 +4,12 @@ class Api::V1::PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Post.all
+    if params[:tag_id]
+      @posts = PostsTag.find_by tag_id: params[:tag_id]
+      # @posts = @posts_ids.map { |id| Post.find(id) }
+    else
+      @posts = Post.all
+    end
     render json: @posts
   end
 
