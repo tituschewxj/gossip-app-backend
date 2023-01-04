@@ -1,9 +1,18 @@
 class Api::V1::ProfilesController < ApplicationController
+  before_action :authenticate_user!, only: %i[create update destroy]
   before_action :set_profile, only: %i[show update destroy]
 
   def index
-    @profiles = Profile.all
-    render json: @profiles
+    if params[:user_id]
+      @profile = Profile.find_by! user_id: params[:user_id]
+      render json: @profile
+    elsif params[:username]
+      @profile = Profile.find_by! username: params[:username]
+      render json: @profile
+    else
+      @profiles = Profile.all
+      render json: @profiles
+    end
   end
 
   def show
@@ -33,6 +42,10 @@ class Api::V1::ProfilesController < ApplicationController
   end
 
   private
+  # def get_profile
+  #   @profile = current_user.profile
+  # end
+
   def set_profile
     @profile = Profile.find(params[:id])
   end

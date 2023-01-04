@@ -1,5 +1,5 @@
 class Api::V1::CommentsController < ApplicationController
-    # before_action :set_post
+    before_action :authenticate_user!, only: %i[ create update destory ]
     before_action :set_comment, only: %i[ show update destroy ]
     before_action :set_post, only: %i[ index ]
 
@@ -11,7 +11,6 @@ class Api::V1::CommentsController < ApplicationController
 
     def create
         @comment = Comment.new(comment_params)
-        # @comment.post_id = @post.id # this seems important
 
         if @comment.save
             render json: @comment, status: :created
@@ -38,12 +37,10 @@ class Api::V1::CommentsController < ApplicationController
     end
 
     private
-    # almost works, need to fix this part
     def set_post
         @post = Post.find(params[:post_id])
     end
     
-
     def set_comment
         @comment = Comment.find(params[:id])
     end

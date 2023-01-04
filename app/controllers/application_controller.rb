@@ -4,11 +4,10 @@ class ApplicationController < ActionController::API
     # tutorial: https://dev.to/dhintz89/devise-and-jwt-in-rails-2mlj
 
     # respond_to :json
-    # before_action :process_token
+    # before_action :process_token, current_user
     before_action :configure_permitted_parameters, if: :devise_controller?
 
     # private 
-
     # def authenticate_user!(options = {})
     #     head :unauthorized unless signed_in?
     # end
