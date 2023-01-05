@@ -40,10 +40,6 @@ class Api::V1::PostsController < ApplicationController
     end
   end
 
-  # def edit
-  #   render json: @post
-  # end
-
   # DELETE /posts/1
   def destroy
     @post.destroy
@@ -57,6 +53,6 @@ class Api::V1::PostsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def post_params
-    params.require(:post).permit(:title, :content, :author)
+      params.require(:post).permit(:title, :content, :author)
   end
 end

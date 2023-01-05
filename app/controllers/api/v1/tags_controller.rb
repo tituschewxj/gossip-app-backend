@@ -1,5 +1,5 @@
 class Api::V1::TagsController < ApplicationController
-  before_action :set_tag, only: %i[show]
+  before_action :set_tag, only: %i[show destroy]
 
   def index
     if params[:post_id]
@@ -24,6 +24,11 @@ class Api::V1::TagsController < ApplicationController
     else
       render json: @tag.errors, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    # @tag.articles.clear
+    @tag.destroy
   end
 
   private
