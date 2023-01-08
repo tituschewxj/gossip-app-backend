@@ -3,7 +3,12 @@ class Api::V1::ProfilesController < ApplicationController
   before_action :set_profile, only: %i[show update destroy]
 
   def index
-    if params[:user_id]
+    if params[:attribute] === 'username'
+      render json: Profile.pluck(:username)
+    elsif params[:state] === 'get_comments' && params[:username]
+      profile = Profile.find_by! username: params[:username]
+      render json: Comment.where(profile_id: profile.id)
+    elsif params[:user_id]
       @profile = Profile.find_by! user_id: params[:user_id]
       render json: @profile
     elsif params[:username]
@@ -16,7 +21,11 @@ class Api::V1::ProfilesController < ApplicationController
   end
 
   def show
-    render json: @profile
+    if params[:state] === 'get_comments'
+      render json: Comment.where(profile_id: params[:id])
+    else
+      render json: @profile
+    end
   end
 
   def create
@@ -30,6 +39,15 @@ class Api::V1::ProfilesController < ApplicationController
   end
 
   def update
+    if @profile.username != params[:username]
+      # update posts and comments to new username
+      Post.where(profile_id: params[:id]).map do |post|
+        post.update(author: params[:username])
+      end
+      Comment.where(profile_id: params[:username]).map do |comment|
+        comment.update(author: params[:username])
+      end
+    end
     if @profile.update(profile_params)
       render json: @profile
     else
@@ -51,6 +69,6 @@ class Api::V1::ProfilesController < ApplicationController
   end
 
   def profile_params
-    params.require(:profile).permit(:username, :description, :user_id)
+    params.require(:profile).permit(:username, :description, :user_id, :state, :attribute)
   end
 end

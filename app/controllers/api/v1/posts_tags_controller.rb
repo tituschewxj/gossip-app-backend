@@ -31,7 +31,7 @@ class Api::V1::PostsTagsController < ApplicationController
         render json: @tag.errors, status: :unprocessable_entity
       end
     end
-
+    
     if @posts_tag.save
       render json: @post_tag, status: :created
     else

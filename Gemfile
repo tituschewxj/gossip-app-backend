@@ -56,3 +56,6 @@ gem "devise", "~> 4.8"
 
 # use json web token (jwt) for token based authentication
 gem 'jwt'
+
+# used to generate dummy data
+gem 'faker'

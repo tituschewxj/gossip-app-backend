@@ -6,15 +6,16 @@ class Api::V1::CommentsController < ApplicationController
     def index
         @comments = Comment.where(post_id: @post.id) # filter out the comments under the post
 
+        @comments = @comments.order('updated_at DESC')
+        
         render json: @comments
     end
 
     def create
         @comment = Comment.new(comment_params)
-
+        @comment.profile_id = Profile.find_by!(username: @comment.author).id
         if @comment.save
             render json: @comment, status: :created
-            # , location: @commment
         else
             render json: @comment.errors, status: :unprocessable_entity
         end
