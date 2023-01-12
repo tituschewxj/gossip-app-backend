@@ -59,3 +59,6 @@ gem 'jwt'
 
 # used to generate dummy data
 gem 'faker'
+
+# used to enable pagination
+gem 'kaminari'

@@ -6,17 +6,9 @@ class Api::V1::PostsController < ApplicationController
 
   # GET /posts
   def index
+    # get posts by profile_id/tag_name(s)/usernames or all posts, depending on the params
     if params[:profile_id]
       @posts = Post.where(profile_id: params[:profile_id])
-    elsif params[:tag_id]
-      @posts = PostsTag.find_by tag_id: params[:tag_id]
-      # @posts = @posts_ids.map { |id| Post.find(id) }
-    elsif params[:tag_name]
-      tag = Tag.find_by name: params[:tag_name]
-      postsTags = PostsTag.where(tag_id: tag.id)
-      @posts = postsTags.map do |postTag|
-        Post.find(postTag.post_id)
-      end
     elsif params[:tag_names]
       tags = params[:tag_names].map do |tag_name|
         Tag.find_by name: tag_name
@@ -38,15 +30,28 @@ class Api::V1::PostsController < ApplicationController
       @posts = Post.all
     end
 
-    @posts = @posts.order('updated_at DESC')
+    # order posts by date updated
+    @posts = @posts.sort_by(&:"#{:updated_at}")
+    @posts = @posts.reverse
 
-    render json: @posts
+    # pagination
+    if params[:page]
+      @posts = Kaminari.paginate_array(@posts).page(params[:page]).per(10)
+    end
+
+    # get the tags of the posts
+    get_tags_from_posts
+
+    render json: { posts: @posts, meta: { totalPosts: Post.count, postsPerPage: 10 }, tags: @tags} 
   end
 
   # GET /posts/1
   def show
-    render json: @post
-    # @comment = @post.comments.build
+    tags = PostsTag.where(post_id: @post.id).map do |postsTag|
+      Tag.find(postsTag.tag_id)
+    end
+
+    render json: { post: @post, tags: tags}
   end
 
   # POST /posts
@@ -55,7 +60,6 @@ class Api::V1::PostsController < ApplicationController
     @post.profile_id = Profile.find_by!(username: @post.author).id
     if @post.save
       render json: @post, status: :created
-      # , location: @post # this causes problems: NoMethodError: (undefined method `post_url'...
     else
       render json: @post.errors, status: :unprocessable_entity
     end
@@ -81,8 +85,16 @@ class Api::V1::PostsController < ApplicationController
     @post = Post.find(params[:id])
   end
 
+  def get_tags_from_posts
+    @tags = @posts.map do |post|
+      PostsTag.where(post_id: post.id).map do |postsTag|
+        Tag.find(postsTag.tag_id)
+      end
+    end
+  end
+
   # Only allow a list of trusted parameters through.
   def post_params
-      params.require(:post).permit(:title, :content, :author, :profile_id, :username, :tag_name, tag_names: [])
+      params.require(:post).permit(:title, :content, :author, :profile_id, :username, :page, :tag_name, tag_names: [])
   end
 end
