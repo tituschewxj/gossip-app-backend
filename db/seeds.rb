@@ -10,7 +10,7 @@ require_relative '../lib/populator_fix.rb'
 
 # to reset the database: delete the developemnt.sqlite3 file and run rails db:setup
 
-10.times do
+20.times do
     # create users
     password = 'password'
     username = Faker::Twitter.unique.screen_name
@@ -41,7 +41,7 @@ Post.all.each do |post|
 end
 
 
-20.times do
+30.times do
     # create tags
     name = Faker::Verb.unique.base
     tag = Tag.create(name: name)
