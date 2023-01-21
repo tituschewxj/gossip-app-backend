@@ -1,12 +1,19 @@
 class Api::V1::CommentsController < ApplicationController
     before_action :authenticate_user!, only: %i[ create update destory ]
     before_action :set_comment, only: %i[ show update destroy ]
-    before_action :set_post, only: %i[ index ]
+    # before_action :set_post, only: %i[ index ]
 
     def index
-        @comments = Comment.where(post_id: @post.id) # filter out the comments under the post
+        if params[:username]
+            profile = Profile.find_by! username: params[:username]
+            @comments = Comment.where(profile_id: profile.id)
+        else
+            set_post
+            @comments = Comment.where(post_id: @post.id) # filter out the comments under the post
+        end
 
-        @comments = @comments.order('updated_at DESC')
+        @comments = @comments.sort_by(&:"#{:updated_at}")
+        @comments = @comments.reverse
         
         render json: @comments
     end
@@ -47,6 +54,6 @@ class Api::V1::CommentsController < ApplicationController
     end
 
     def comment_params
-        params.require(:comment).permit(:content, :author, :post_id)
+        params.require(:comment).permit(:content, :author, :post_id, :username)
     end
 end

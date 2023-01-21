@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       resources :profiles
       resources :tags
       resources :posts_tags
+      resources :comments
       resources :posts do
         resources :comments, shallow: true
       end

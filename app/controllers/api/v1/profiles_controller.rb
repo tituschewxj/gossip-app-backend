@@ -5,9 +5,6 @@ class Api::V1::ProfilesController < ApplicationController
   def index
     if params[:attribute] === 'username'
       render json: Profile.pluck(:username)
-    elsif params[:state] === 'get_comments' && params[:username]
-      profile = Profile.find_by! username: params[:username]
-      render json: Comment.where(profile_id: profile.id)
     elsif params[:user_id]
       @profile = Profile.find_by! user_id: params[:user_id]
       render json: @profile
@@ -21,11 +18,7 @@ class Api::V1::ProfilesController < ApplicationController
   end
 
   def show
-    if params[:state] === 'get_comments'
-      render json: Comment.where(profile_id: params[:id])
-    else
-      render json: @profile
-    end
+    render json: @profile
   end
 
   def create
@@ -69,6 +62,6 @@ class Api::V1::ProfilesController < ApplicationController
   end
 
   def profile_params
-    params.require(:profile).permit(:username, :description, :user_id, :state, :attribute)
+    params.require(:profile).permit(:username, :description, :user_id, :attribute)
   end
 end
